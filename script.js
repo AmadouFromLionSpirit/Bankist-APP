@@ -127,3 +127,14 @@ accounts.forEach(function (x) {
 });
 
 console.log(accounts);
+
+//Calculate balance and display it 
+/* const balance = account1.movements.reduce((acc, cur) => acc + cur, 0);
+labelBalance.innerHTML = balance + '€'; */
+//Correction: 
+const calcDisplayBalance  = function (movements) {
+  const balance = movements.reduce ((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+
+calcDisplayBalance(account1.movements);
