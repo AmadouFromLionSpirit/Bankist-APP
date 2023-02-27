@@ -138,3 +138,20 @@ const calcDisplayBalance  = function (movements) {
 };
 
 calcDisplayBalance(account1.movements);
+
+const findMaximum = function (movements) {
+  const max = movements.reduce((acc, curr) => acc < curr ? acc = curr : acc = acc, movements[0]);
+  console.log( "Maximum is " + max);
+}
+
+findMaximum(account1.movements)
+
+//Another way of finding the maximum 
+/* const max = movements.reduce((acc, mov) => {
+  if(acc > mov)
+  return acc;
+  else 
+  return mov;
+}, movements[0]);
+console.log(max); */
+
