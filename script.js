@@ -80,11 +80,12 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+const calcDisplayBalance = function (acc) {
+  const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  acc.balance = balance;
   labelBalance.textContent = `${balance}€`;
 };
-calcDisplayBalance(account1.movements);
+calcDisplayBalance(account1);
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
@@ -154,6 +155,15 @@ accounts.forEach(function (x) {
   );
 });
 
+const updateUI = function (acc) {
+  //Display Balance
+  calcDisplayBalance(currentAccount);
+  //Display Summary
+  calcDisplaySummary(currentAccount);
+  //Display Movements
+  displayMovements(currentAccount.movements);
+};
+
 console.log(accounts);
 /* à implémenter les user name plus tard, j'ai remplcé en dessous par owner name */
 //Event handlers
@@ -175,12 +185,7 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
-    //Display Balance
-    calcDisplayBalance(currentAccount.movements);
-    //Display Summary
-    calcDisplaySummary(currentAccount);
-    //Display Movements
-    displayMovements(currentAccount.movements);
+    updateUI(currentAccount);
   }
 });
 
@@ -188,5 +193,18 @@ btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Number(inputTransferAmount.value);
   const receiveAcc = accounts.find(acc => acc.owner === inputTransferTo.value);
+  inputTransferAmount.value = inputTransferTo.value = '';
   console.log(amount, receiveAcc);
+
+  if (
+    amount > 0 &&
+    receiveAcc &&
+    currentAccount.balance >= amount &&
+    receiveAcc?.owner !== currentAccount.owner
+  ) {
+    console.log('Transfer valid');
+    currentAccount.movements.push(-amount);
+    receiveAcc.movements.push(amount);
+    updateUI(currentAccount);
+  }
 });
